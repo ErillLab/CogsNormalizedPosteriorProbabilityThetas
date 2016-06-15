@@ -18,6 +18,7 @@ import sys
 import random
 #math functions
 import math
+import numpy as np
 
 #------------------------------------------------------------------------------
 def read_motif(motif_filename, verb=0):
@@ -255,7 +256,7 @@ def esfmax_score_seqs(seq_list, pssm, rpssm=None, verb=0, mode=1):
             sc=[sc]
             rsc=[rsc]
         #apply softmax
-        scores=map(lambda x: math.log(math.exp(x[0])+math.exp(x[1])),zip(sc,rsc))
+        scores = np.log(np.exp(sc)+np.exp(rsc))
         #append list of scores to overall list (for each sequence)
         scorelist.append(scores)
     
@@ -282,13 +283,10 @@ def ll_ratios(score_set, n_g, n_m, alpha, verb=0):
     
     #for each score list
     for score_list in score_set:
-        #compute the sum of log likelihood ratios for score array
-        sumlr=0.0
-        for scr in score_list:
-            lpd_b = n_g.logpdf(scr)
-            lpd_f = math.log(alpha*n_m.pdf(scr) + (1-alpha)*n_g.pdf(scr))
-            #add log-likelihood differences (i.e. mult. likelihood ratios)
-            sumlr=sumlr + (lpd_b-lpd_f)
+        #compute the sum of log likelihood ratios for score array          
+        lpd_b = n_g.logpdf(score_list)
+        lpd_f = np.log(alpha*n_m.pdf(score_list) + (1-alpha)*n_g.pdf(score_list))
+        sumlr = sum(lpd_b-lpd_f)
         llrs.append(sumlr)
     return (llrs)    
 
@@ -451,11 +449,6 @@ def NormPostP(LLR,PPR,lnormf,mode=0,verb=0):
         for loglr, lnorm in zip(LLR, lnormf):
             cumllr=cumllr+loglr+lnorm
         return(1.0/(1.0+math.exp(cumllr)*PPR))    
-
-
-    
-    
-    
-    
+  
     
     
