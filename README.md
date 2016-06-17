@@ -1,5 +1,5 @@
-# CogsNormalizedPosteriorProbabilityThetas
-Scripts for determining the normalized posterior probability of COGs above various thresholds.
+# MetagenomeRegulatoryAnalysis
+Scripts for determining the normalized posterior probability of eggNOG/COGs above various thresholds.
 
 ## Initial steps
 Make sure the samples have been scored with the IGC pipeline. The paths may need modifying.
